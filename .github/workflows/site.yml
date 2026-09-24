@@ -1,0 +1,49 @@
+name: Update dashboard
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update data
+        run: python3 scripts/update.py
+
+      - name: Save readings
+        run: |
+          git config user.name "Dashboard updater"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git diff --cached --quiet || (git commit -m "Update dashboard data" && git push)
+
+      - name: Prepare page
+        run: mkdir -p public && cp index.html data.json public/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Publish site
+        id: deployment
+        uses: actions/deploy-pages@v4
