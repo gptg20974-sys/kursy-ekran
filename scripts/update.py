@@ -45,22 +45,26 @@ def rows(table):
 def brent():
     url = ('https://iss.moex.com/iss/engines/futures/markets/forts/securities.json'
            '?iss.meta=off&iss.only=securities,marketdata'
-           '&securities.columns=SECID,SHORTNAME,LASTTRADEDATE'
-           '&marketdata.columns=SECID,LAST,CHANGE,PERCENT')
+           '&securities.columns=SECID,SHORTNAME,ASSETCODE,LASTTRADEDATE,PREVPRICE'
+           '&marketdata.columns=SECID,LAST,TRADEDATE,TIME')
     data = json.loads(request(url))
     market = {item['SECID']: item for item in rows(data['marketdata'])}
     contracts = sorted((item for item in rows(data['securities'])
-                        if item['SECID'].startswith(('BR-', 'BRM-')) and item['LASTTRADEDATE']
+                        if item.get('ASSETCODE') == 'BR' and item['LASTTRADEDATE']
                         and item['LASTTRADEDATE'] >= NOW.strftime('%Y-%m-%d')),
                        key=lambda item: item['LASTTRADEDATE'])
     for contract in contracts:
         quote = market.get(contract['SECID'])
         if quote and quote.get('LAST') is not None and float(quote['LAST']) > 0:
-            return {'value': float(quote['LAST']),
-                    'change': float(quote['CHANGE']) if quote.get('CHANGE') is not None else None,
-                    'percent': float(quote['PERCENT']) if quote.get('PERCENT') is not None else None,
-                    'contract': contract['SECID']}
-    return None
+            value = float(quote['LAST'])
+            previous = contract.get('PREVPRICE')
+            change = value - float(previous) if previous else None
+            print('Brent:', contract['SECID'], value, quote.get('TRADEDATE'), quote.get('TIME'))
+            return {'value': value, 'change': change,
+                    'percent': change / float(previous) * 100 if change is not None else None,
+                    'contract': contract['SHORTNAME'], 'secid': contract['SECID'],
+                    'tradeDate': quote.get('TRADEDATE'), 'tradeTime': quote.get('TIME')}
+    raise RuntimeError('MOEX returned no traded, unexpired Brent contracts')
 
 def weather():
     url = ('https://api.open-meteo.com/v1/forecast?latitude=55.7558&longitude=37.6173'
