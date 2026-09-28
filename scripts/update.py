@@ -86,16 +86,29 @@ def news():
     return items
 
 def main():
-    data = {'rates': None, 'brent': None, 'weather': None, 'news': [], 'fetchedAt': NOW.isoformat()}
+    try:
+        previous = json.loads(OUTPUT.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        previous = {}
+    data = {'fetchedAt': NOW.isoformat(), 'sources': {}}
+    successes = 0
     for key, fn in [('rates', rates), ('brent', brent), ('weather', weather), ('news', news)]:
         try:
-            data[key] = fn()
+            value = fn()
+            if not value or (key == 'rates' and not all(code in value for code in ('USD', 'JPY', 'EUR'))):
+                raise ValueError('Incomplete source response')
+            data[key] = value
+            data['sources'][key] = {'updatedAt': NOW.isoformat(), 'error': False}
+            successes += 1
         except Exception as exc:
             print(f'{key}: unavailable: {exc}')
-    if not any((data['rates'], data['brent'], data['weather'], data['news'])):
+            data[key] = previous.get(key, [] if key == 'news' else None)
+            old = previous.get('sources', {}).get(key, {})
+            data['sources'][key] = {'updatedAt': old.get('updatedAt', previous.get('fetchedAt')), 'error': True}
+    if not successes:
         raise RuntimeError('No data source responded; existing data file remains untouched')
     OUTPUT.write_text(json.dumps(data, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
-    print('Updated:', ', '.join(k for k in ('rates', 'brent', 'weather', 'news') if data[k]))
+    print('Updated sources:', successes)
 
 if __name__ == '__main__':
     main()
