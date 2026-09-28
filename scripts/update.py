@@ -29,9 +29,11 @@ def rate_xml(payload):
 
 def rates():
     today, a = rate_xml(request('https://www.cbr.ru/scripts/XML_daily.asp'))
-    yesterday = (NOW - dt.timedelta(days=1)).strftime('%d/%m/%Y')
+    # Compare against the day before the effective CBR rate, not calendar yesterday.
+    effective_day = dt.datetime.strptime(today, '%d.%m.%Y').date()
+    yesterday = (effective_day - dt.timedelta(days=1)).strftime('%d/%m/%Y')
     prior_day, b = rate_xml(request('https://www.cbr.ru/scripts/XML_daily.asp?date_req=' + yesterday))
-    out = {'date': today}
+    out = {'date': today, 'previousDate': prior_day}
     for code in ('USD', 'JPY', 'EUR'):
         value = a.get(code)
         if value is not None:
