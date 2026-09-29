@@ -206,6 +206,7 @@ function weatherIcon(code){
 Object.assign(conditions,{56:['','Ледяная морось'],57:['','Ледяная морось'],66:['','Ледяной дождь'],67:['','Ледяной дождь'],77:['','Снежные зёрна'],85:['','Снегопад'],86:['','Снегопад'],96:['','Гроза с градом'],99:['','Гроза с градом']});
 const CACHE_KEY='market-screen-data-v2';
 let loading=false,lastData=null,offline=false;
+let manualNotice="",manualNoticeUntil=0;
 if(new URLSearchParams(location.search).get('tv')==='1')document.documentElement.classList.add('tv');
 function stamp(value){if(!value)return 'время неизвестно';const date=new Date(value);return Number.isFinite(date.getTime())?new Intl.DateTimeFormat('ru-RU',{...msk,day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}).format(date)+' МСК':'время неизвестно'}
 function sourceNote(data,key){
@@ -214,6 +215,7 @@ function sourceNote(data,key){
 }
 function status(){
  const el=document.querySelector('#status');
+ if(manualNotice&&Date.now()<manualNoticeUntil){el.textContent=manualNotice;return}
  const delayed=lastData&&Date.now()-new Date(lastData.fetchedAt).getTime()>1800000;
  const partial=lastData&&Object.values(lastData.sources||{}).some(s=>s.error);
  el.parentElement.classList.toggle('warning',offline||delayed||partial);
@@ -244,18 +246,34 @@ async function fetchData(){
  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),20000);
  try{const response=await fetch('./data.json',{cache:'no-store',signal:controller.signal});if(!response.ok)throw Error('HTTP');const data=await response.json();if(!data||!Number.isFinite(new Date(data.fetchedAt).getTime())||!(data.rates||data.brent||data.weather||data.news?.length))throw Error('Invalid data');return data}finally{clearTimeout(timeout)}
 }
-async function load(includeNews=false){
- if(loading)return;loading=true;const button=document.querySelector('#refresh');button.disabled=true;
- try{const data=await fetchData();lastData=data;offline=false;remember(data);render(data,includeNews)}
- catch(e){offline=true;status();if(!lastData&&includeNews)headlines([])}
- finally{loading=false;button.disabled=false}
+async function load(includeNews=false,manual=false){
+ if(loading)return;
+ loading=true;manualNotice="";manualNoticeUntil=0;
+ const button=document.querySelector('#refresh');button.disabled=true;
+ if(manual){button.textContent='Проверяю…';document.querySelector('#status').textContent='Проверяем данные…'}
+ try{
+  const previous=lastData?JSON.stringify([lastData.rates,lastData.brent,lastData.weather,lastData.news]):null;
+  const data=await fetchData();lastData=data;offline=false;remember(data);render(data,includeNews);
+  if(manual){
+   const unchanged=previous===JSON.stringify([data.rates,data.brent,data.weather,data.news]);
+   const partial=Object.values(data.sources||{}).some(source=>source.error);
+   const delayed=Date.now()-new Date(data.fetchedAt).getTime()>1800000;
+   manualNotice=delayed?'Проверено · свежие данные пока не опубликованы':partial?'Данные получены · часть источников недоступна':unchanged?'Проверено · новых данных нет':'Данные обновлены';
+   manualNoticeUntil=Date.now()+7000;status();setTimeout(status,7100);
+  }
+ }catch(e){
+  offline=true;status();if(!lastData&&includeNews)headlines([]);
+  if(manual){manualNotice=lastData?'Нет связи · сохранённые данные на экране':'Нет связи · повторим через 2 минуты';manualNoticeUntil=Date.now()+7000;status();setTimeout(status,7100)}
+ }finally{loading=false;button.disabled=false;button.textContent='Обновить ↻'}
 }
+
 async function refreshNews(){try{const data=await fetchData();showNews(data)}catch(e){/* Retain the last successful headlines. */}}
 try{const cached=JSON.parse(localStorage.getItem(CACHE_KEY));if(cached&&Number.isFinite(new Date(cached.fetchedAt).getTime())){lastData=cached;offline=true;render(cached,true)}}catch(e){/* Ignore invalid or unavailable storage. */}
-document.querySelector('#refresh').addEventListener('click',()=>load(true));
+document.querySelector('#refresh').addEventListener('click',()=>load(true,true));
 window.addEventListener('online',()=>load(true));
 load(true);setInterval(()=>load(false),120000);setInterval(refreshNews,300000);setInterval(status,60000);
 </script></body></html>
+
 
 
 
