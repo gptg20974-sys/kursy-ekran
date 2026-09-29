@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#050E1C"><title>Табло</title><meta name="description" content="Курсы валют, Brent, погода и новости на одном экране"><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23081d2b'/%3E%3Cpath d='M10 44 26 28l9 8 19-20' fill='none' stroke='%2353d7c7' stroke-width='6'/%3E%3C/svg%3E">
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#071222"><title>Табло</title><meta name="description" content="Курсы валют, Brent, погода и новости на одном экране"><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23081d2b'/%3E%3Cpath d='M10 44 26 28l9 8 19-20' fill='none' stroke='%2353d7c7' stroke-width='6'/%3E%3C/svg%3E">
 <style>
 :root{font-family:Arial,"Helvetica Neue",sans-serif;color:#f5f8ff;background:#000000;font-synthesis:none}*{box-sizing:border-box}body{margin:0}.screen{min-height:100vh;padding:2vh 2vw 0;display:flex;flex-direction:column;background:#000000}.main{display:grid;grid-template-columns:minmax(0,1fr) 22%;gap:1.4vw;flex:1;min-height:0}.board,.weather,.datetime{border:1px solid #263853;background:#0b1830;border-radius:18px;overflow:hidden}.board{display:flex;flex-direction:column}.heading{padding:1.4vh 1.8vw;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #263853;gap:12px}.heading h1{font-size:2.5vw;margin:0;font-weight:700}.label{font-size:1vw;color:#a8bad3;letter-spacing:.08em;font-weight:700}.heading .label{display:none}.origin{color:#a8bad3;text-align:right;font-size:1vw}.rows{display:grid;grid-template-rows:repeat(4,minmax(0,1fr));flex:1;min-height:0}.row{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;align-content:center;align-items:baseline;column-gap:1.5vw;flex:1;min-height:0;padding:1.2vh 1.8vw;border-bottom:1px solid #263853}.row:last-child{border:0}.row>div:first-child{display:contents}.symbol{grid-column:1;grid-row:1}.sub{grid-column:1;grid-row:2}.price{grid-column:2;grid-row:1}.change{grid-column:2;grid-row:2}.symbol{font-size:3.65vw;font-weight:700;letter-spacing:-.035em;white-space:nowrap}.sub{color:#a8bad3;font-size:.85vw;margin-top:.6vh;line-height:1.3;max-width:31vw}.price{font-size:6.6vw;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:0;line-height:1.1;white-space:nowrap;text-align:right}.change{grid-column:2;font-size:1.75vw;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;margin-top:.3vh}.up{color:#6ce5ba}.down{color:#ff969f}.neutral{color:#a8bad3}.aside{display:flex;flex-direction:column;gap:1.5vh;min-width:0}.weather{padding:1.8vh 1vw;text-align:center}.weather h2{font-size:2.5vw;margin:0 0 1vh}.weather .label{display:none}.weatherbody{display:flex;flex-direction:column;align-items:center}.temp{font-size:6.6vw;font-weight:700;letter-spacing:-.035em;line-height:1.1}.icon{display:block;height:8.5vh;margin:.8vh auto}.icon svg{height:100%;width:auto;max-width:100%}.description{font-size:1.9vw;line-height:1.15;margin:.7vh 0}.weatherfoot{color:#a8bad3;font-size:1vw;line-height:1.4;margin-top:1vh}.datetime{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:1.2vh .7vw;text-align:center;gap:1vh}.clock{font-size:5.6vw;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:0;line-height:1.1}.date{font-size:2vw;line-height:1.3;font-weight:700}.weekday{font-size:1.6vw;color:#a8bad3;text-transform:capitalize}.timezone{font-size:.85vw;color:#a8bad3;letter-spacing:.13em}.status{color:#a8bad3;font-size:.85vw;display:flex;align-items:center;justify-content:space-between;gap:8px}.status button{background:none;color:#dae8ff;border:1px solid #354b70;border-radius:8px;padding:7px 8px;cursor:pointer;font:inherit}.ticker{display:flex;align-items:stretch;background:#102341;margin:1.5vh -2vw 0;height:8.5vh;min-height:52px;overflow:hidden;flex-shrink:0}.tickername{display:flex;align-items:center;background:#60dcc5;color:#07182c;padding:0 1.4vw;font-size:1.35vw;font-weight:800;z-index:1}.tickerwindow{overflow:hidden;display:flex;align-items:center;flex:1;min-width:0}.track{display:flex;align-items:center;white-space:nowrap;width:max-content;animation:move var(--duration,180s) linear infinite;font-size:2.15vw;will-change:transform}.newsset{display:flex;align-items:center;gap:2.5vw;padding-right:2.5vw}.track a{color:#f5f8ff;text-decoration:none}.track a:hover{text-decoration:underline}.track i{color:#60dcc5;font-style:normal}@keyframes move{to{transform:translateX(-50%)}}@media(prefers-reduced-motion:reduce){.track{animation:none}.tickerwindow{overflow:auto}}
 @media(min-width:851px){.screen{height:100vh}}
@@ -55,10 +55,10 @@ html.tv #refresh,:fullscreen #refresh{display:none}
 }
 
 /* Compact weather and balanced time zones. */
-:root,.screen{background:#050E1C;color:#F3F6FA}
-.board,.weather,.datetime{background:#09172A;border-color:#22364D}
+:root,.screen{background:#071222;color:#F3F6FA}
+.board,.weather,.datetime{background:#0B1B30;border-color:#22364D}
 .row{border-bottom-color:#22364D}
-.ticker{background:#0C1B2F}.tickername{background:#69BFB4;color:#050E1C}.track a{color:#F3F6FA}
+.ticker{background:#102138}.tickername{background:#69BFB4;color:#071222}.track a{color:#F3F6FA}
 .datetime{gap:0}
 .timezone-group{width:100%;display:flex;flex-direction:column;align-items:center;gap:.35vh}
 .timezone-group+.timezone-group{border-top:1px solid #22364D;margin-top:1vh;padding-top:1vh}
@@ -118,6 +118,36 @@ html.tv #refresh,:fullscreen #refresh{display:none}
 /* Slightly larger labels without changing the clock numerals. */
 @media(min-width:851px){.datetime .timezone{font-size:calc(1.02 * var(--unit,1vw))}}
 @media(max-width:850px){.datetime .timezone{font-size:12px}}
+
+/* Two aligned clock rows with a separate calendar beneath them. */
+@media(min-width:851px){
+ .datetime{justify-content:center;padding:1.4vh .7vw}
+ .datetime .timezone-group{display:grid;grid-template-columns:1fr auto;column-gap:.4vw;row-gap:.35vh;align-items:center}
+ .datetime .timezone-group .timezone{text-align:left;font-size:calc(1.02 * var(--unit,1vw));letter-spacing:.04em}
+ .datetime .timezone-group .clock{width:auto;text-align:right;line-height:1.15}
+ .datetime .timezone-group+.timezone-group{margin-top:2.2vh;padding-top:2.2vh}
+ .datetime .tokyo-date{grid-column:1/-1;text-align:right}
+ .datetime .date{width:100%;border-top:1px solid #22364D;padding-top:2vh;margin-top:2.2vh}
+ .datetime .weekday{margin-top:.6vh}
+}
+.weatherbody{column-gap:1vw}
+.weatherbody .icon{width:6.2vw;height:6.2vw;max-height:10vh}
+@media(max-width:850px){.weatherbody .icon{width:52px;height:52px;max-height:none}}
+
+/* Distance-readable city labels; both clocks share the same center line. */
+.track{font-weight:600}
+@media(min-width:851px){
+ .main{grid-template-columns:minmax(0,1fr) 26%}
+ .datetime .timezone-group{display:flex;flex-direction:column;align-items:center;gap:.45vh}
+ .datetime .timezone-group .timezone{width:100%;text-align:center;font-size:calc(2 * var(--unit,1vw));font-weight:700;letter-spacing:.02em;line-height:1.15;color:#F3F6FA}
+ .datetime .timezone-group+.timezone-group .timezone{color:#B8D7F0}
+ .datetime .timezone-group .clock{width:100%;text-align:center}
+ .datetime .timezone-group+.timezone-group{margin-top:1.2vh;padding-top:1.2vh}
+ .datetime .tokyo-date{text-align:center}
+ .datetime .date{margin-top:1.2vh;padding-top:1.2vh}
+ .datetime{padding:1vh .8vw}
+}
+@media(max-width:850px){.datetime .timezone-group .timezone{font-size:18px;letter-spacing:.02em}}
 </style></head><body><div class="screen">
 
 <main class="main"><section class="board" aria-label="Курсы валют и нефть"><div class="rows">
@@ -125,7 +155,7 @@ html.tv #refresh,:fullscreen #refresh{display:none}
 <div class="row" data-key="JPY"><div><div class="symbol">JPY / RUB</div><div class="sub">Японская иена · за 1 ¥ · курс ЦБ</div></div><div class="price">—</div><div class="change neutral">—</div></div>
 <div class="row" data-key="EUR"><div><div class="symbol">EUR / RUB</div><div class="sub">Евро · курс ЦБ</div></div><div class="price">—</div><div class="change neutral">—</div></div>
 <div class="row" data-key="BRENT"><div><div class="symbol">Нефть Brent</div><div class="sub" id="brent-detail">Ближайший фьючерс · USD / баррель</div></div><div class="price">—</div><div class="change neutral">—</div></div>
-</div></section><aside class="aside"><section class="weather"><div><div class="label">ПОГОДА СЕГОДНЯ</div><h2>Москва</h2></div><div class="weatherbody"><div class="temp" id="temp">—</div><span class="icon" id="icon" aria-hidden="true">◌</span><div class="description" id="desc">Загрузка погоды</div></div><div class="weatherfoot"><span id="weatherfoot"></span><span class="weather-source">Open-Meteo</span><span id="weather-state" class="source-note"></span></div></section><section class="datetime" aria-label="Время Москвы и Токио, дата"><div class="timezone-group"><div class="timezone">МОСКВА</div><time class="clock" id="clock"></time></div><div class="timezone-group"><div class="timezone">ТОКИО</div><time class="clock" id="clock-tokyo"></time><div class="tokyo-date" id="tokyo-date" hidden></div></div><div class="date" id="date"></div><div class="weekday" id="weekday"></div></section><div class="status"><span id="status">Загружаем данные…</span><button id="refresh" type="button">Обновить ↻</button></div></aside></main>
+</div></section><aside class="aside"><section class="weather"><div><div class="label">ПОГОДА СЕГОДНЯ</div><h2>Москва</h2></div><div class="weatherbody"><div class="temp" id="temp">—</div><span class="icon" id="icon" aria-hidden="true">◌</span><div class="description" id="desc">Загрузка погоды</div></div><div class="weatherfoot"><span id="weatherfoot"></span><span id="weather-state" class="source-note"></span></div></section><section class="datetime" aria-label="Время Москвы и Токио, дата"><div class="timezone-group"><div class="timezone">МОСКВА</div><time class="clock" id="clock"></time></div><div class="timezone-group"><div class="timezone">ТОКИО</div><time class="clock" id="clock-tokyo"></time><div class="tokyo-date" id="tokyo-date" hidden></div></div><div class="date" id="date"></div><div class="weekday" id="weekday"></div></section><div class="status"><span id="status">Загружаем данные…</span><button id="refresh" type="button">Обновить ↻</button></div></aside></main>
 <footer class="ticker"><div class="tickername">РБК · НОВОСТИ</div><div class="tickerwindow"><div class="track" id="track">Загружаем заголовки…</div></div></footer></div>
 <script>
 function fitViewport(){
@@ -152,20 +182,20 @@ const conditions={0:['☀','Ясно'],1:['🌤','Малооблачно'],2:['�
 let newsKey='';
 function headlines(items){const track=document.querySelector('#track');const key=JSON.stringify(items||[]);if(key===newsKey)return;newsKey=key;track.replaceChildren();if(!items?.length){track.textContent='Новости временно недоступны';track.style.animation='none';return}for(let copy=0;copy<2;copy++){const group=document.createElement('span');group.className='newsset';if(copy)group.setAttribute('aria-hidden','true');items.forEach(item=>{const a=document.createElement('a');a.textContent=item.title;a.href=item.link;a.target='_blank';a.rel='noopener noreferrer';if(copy)a.tabIndex=-1;const dot=document.createElement('i');dot.textContent='✦';group.append(a,dot)});track.append(group)}track.style.animation='';requestAnimationFrame(()=>{track.style.setProperty('--duration',Math.max(60,track.scrollWidth/2/Math.max(40,innerWidth*.04))/1.1+'s')})}
 function weatherIcon(code){
- const sun='<g stroke="#F5D486" stroke-width="3.2" stroke-linecap="round"><circle cx="39" cy="34" r="13" fill="#F5D486" stroke="none"/><path d="M39 12V6m0 56v-6M17 34h-6m56 0h-6M23.4 18.4l-4.2-4.2m39.6 39.6-4.2-4.2m-31.2 0-4.2 4.2m39.6-39.6-4.2 4.2"/></g>';
- const cloud='<path d="M30 70C20 70 14 64 14 56c0-8 6-14 14-15 2-12 11-20 23-20 12 0 22 9 24 20 10 0 18 6 18 15S86 70 76 70Z" fill="#E4EDF7" stroke="#B8CCE0" stroke-width="1.5" stroke-linejoin="round"/>';
- const rain='<path d="m36 79-4 8m23-8-4 8m23-8-4 8" stroke="#8DCFF2" stroke-width="3.5" stroke-linecap="round"/>';
- const snow='<g stroke="#DCEBF9" stroke-width="2" stroke-linecap="round"><path d="M35 77v12m-5-9 10 6m-10 0 10-6M58 80v12m-5-9 10 6m-10 0 10-6M79 77v12m-5-9 10 6m-10 0 10-6"/></g>';
+ const sun='<g stroke="#F6CA69" stroke-width="3.5" stroke-linecap="round"><circle cx="73" cy="31" r="14" fill="#F6CA69" stroke="none"/><path d="M73 8V3m0 56v-5M50 31h-5m56 0h-5M57 15l-4-4m40 40-4-4M57 47l-4 4m40-40-4 4"/></g>';
+ const cloud='<path d="M27 76c-10 0-18-8-18-18 0-9 7-17 16-18C28 27 38 19 51 19c16 0 28 12 29 27h3c10 0 18 7 18 15s-7 15-17 15H27Z" fill="#E6F0FB"/><path d="M27 76h57" stroke="#BCD2E8" stroke-width="2.5" stroke-linecap="round"/>';
+ const drops='<path d="m32 86-3 7m27-7-3 7m27-7-3 7" stroke="#79BFF0" stroke-width="4" stroke-linecap="round"/>';
  let shape;
- if(code===0)shape='<g transform="translate(14 12)">'+sun+'</g>';
- else if(code===1||code===2)shape=sun+'<g transform="translate(5 13) scale(.86)">'+cloud+'</g>';
- else shape=cloud;
- if((code>=51&&code<=67)||(code>=80&&code<=82))shape+=rain;
- if((code>=71&&code<=77)||code===85||code===86)shape+=snow;
- if(code>=95)shape+='<path d="m57 75-9 12h10l-5 12 20-22H61l5-8" fill="#F5D486" stroke-linejoin="round"/>';
- if(code===45||code===48)shape+='<path d="M24 79h58M31 87h44" stroke="#B8CCE0" stroke-width="3" stroke-linecap="round"/>';
- return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" fill="none" aria-hidden="true">'+shape+'</svg>';
+ if(code===0)shape='<g transform="translate(-17 20)">'+sun+'</g>';
+ else if(code===1||code===2)shape=sun+'<g transform="translate(0 23) scale(.87)">'+cloud+'</g>';
+ else shape='<g transform="translate(0 3)">'+cloud+'</g>';
+ if((code>=51&&code<=67)||(code>=80&&code<=82))shape+=drops;
+ if((code>=71&&code<=77)||code===85||code===86)shape+='<g fill="#C9E4F8"><circle cx="30" cy="89" r="3"/><circle cx="55" cy="94" r="3"/><circle cx="80" cy="89" r="3"/></g>';
+ if(code>=95)shape+='<path d="m57 80-10 14h10l-5 12 23-23H63l5-8" fill="#F6CA69"/>';
+ if(code===45||code===48)shape+='<path d="M20 88h68M29 98h50" stroke="#B8CCE0" stroke-width="3" stroke-linecap="round"/>';
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 112 112" fill="none" aria-hidden="true">'+shape+'</svg>';
 }
+
 Object.assign(conditions,{56:['','Ледяная морось'],57:['','Ледяная морось'],66:['','Ледяной дождь'],67:['','Ледяной дождь'],77:['','Снежные зёрна'],85:['','Снегопад'],86:['','Снегопад'],96:['','Гроза с градом'],99:['','Гроза с градом']});
 const CACHE_KEY='market-screen-data-v2';
 let loading=false,lastData=null,offline=false;
@@ -219,6 +249,7 @@ document.querySelector('#refresh').addEventListener('click',()=>load(true));
 window.addEventListener('online',()=>load(true));
 load(true);setInterval(()=>load(false),120000);setInterval(refreshNews,300000);setInterval(status,60000);
 </script></body></html>
+
 
 
 
