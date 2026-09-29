@@ -43,6 +43,16 @@
 @media(min-width:851px){.change{font-size:calc(2.1 * var(--unit,1vw))}.status{font-size:calc(.95 * var(--unit,1vw))}.weatherfoot{font-size:calc(.9 * var(--unit,1vw))}}
 @media(min-width:851px) and (hover:none) and (pointer:coarse){#refresh{display:none}}
 html.tv #refresh,:fullscreen #refresh{display:none}
+
+/* Use the full screen while keeping a small inset around the text. */
+.screen{padding:0}
+.ticker{margin-left:0;margin-right:0}
+@media(min-width:851px){
+ .symbol{font-size:calc(4.1975 * var(--unit,1vw))}
+}
+@media(max-width:850px){
+ .symbol{font-size:clamp(25.3px,6.325vw,46px)}
+}
 </style></head><body><div class="screen">
 
 <main class="main"><section class="board" aria-label="Курсы валют и нефть"><div class="rows">
