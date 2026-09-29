@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#000000"><title>Табло</title><meta name="description" content="Курсы валют, Brent, погода и новости на одном экране"><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23081d2b'/%3E%3Cpath d='M10 44 26 28l9 8 19-20' fill='none' stroke='%2353d7c7' stroke-width='6'/%3E%3C/svg%3E">
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#071426"><title>Табло</title><meta name="description" content="Курсы валют, Brent, погода и новости на одном экране"><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23081d2b'/%3E%3Cpath d='M10 44 26 28l9 8 19-20' fill='none' stroke='%2353d7c7' stroke-width='6'/%3E%3C/svg%3E">
 <style>
 :root{font-family:Arial,"Helvetica Neue",sans-serif;color:#f5f8ff;background:#000000;font-synthesis:none}*{box-sizing:border-box}body{margin:0}.screen{min-height:100vh;padding:2vh 2vw 0;display:flex;flex-direction:column;background:#000000}.main{display:grid;grid-template-columns:minmax(0,1fr) 22%;gap:1.4vw;flex:1;min-height:0}.board,.weather,.datetime{border:1px solid #263853;background:#0b1830;border-radius:18px;overflow:hidden}.board{display:flex;flex-direction:column}.heading{padding:1.4vh 1.8vw;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #263853;gap:12px}.heading h1{font-size:2.5vw;margin:0;font-weight:700}.label{font-size:1vw;color:#a8bad3;letter-spacing:.08em;font-weight:700}.heading .label{display:none}.origin{color:#a8bad3;text-align:right;font-size:1vw}.rows{display:grid;grid-template-rows:repeat(4,minmax(0,1fr));flex:1;min-height:0}.row{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;align-content:center;align-items:baseline;column-gap:1.5vw;flex:1;min-height:0;padding:1.2vh 1.8vw;border-bottom:1px solid #263853}.row:last-child{border:0}.row>div:first-child{display:contents}.symbol{grid-column:1;grid-row:1}.sub{grid-column:1;grid-row:2}.price{grid-column:2;grid-row:1}.change{grid-column:2;grid-row:2}.symbol{font-size:3.65vw;font-weight:700;letter-spacing:-.035em;white-space:nowrap}.sub{color:#a8bad3;font-size:.85vw;margin-top:.6vh;line-height:1.3;max-width:31vw}.price{font-size:6.6vw;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:0;line-height:1.1;white-space:nowrap;text-align:right}.change{grid-column:2;font-size:1.75vw;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;margin-top:.3vh}.up{color:#6ce5ba}.down{color:#ff969f}.neutral{color:#a8bad3}.aside{display:flex;flex-direction:column;gap:1.5vh;min-width:0}.weather{padding:1.8vh 1vw;text-align:center}.weather h2{font-size:2.5vw;margin:0 0 1vh}.weather .label{display:none}.weatherbody{display:flex;flex-direction:column;align-items:center}.temp{font-size:6.6vw;font-weight:700;letter-spacing:-.035em;line-height:1.1}.icon{display:block;height:8.5vh;margin:.8vh auto}.icon svg{height:100%;width:auto;max-width:100%}.description{font-size:1.9vw;line-height:1.15;margin:.7vh 0}.weatherfoot{color:#a8bad3;font-size:1vw;line-height:1.4;margin-top:1vh}.datetime{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:1.2vh .7vw;text-align:center;gap:1vh}.clock{font-size:5.6vw;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:0;line-height:1.1}.date{font-size:2vw;line-height:1.3;font-weight:700}.weekday{font-size:1.6vw;color:#a8bad3;text-transform:capitalize}.timezone{font-size:.85vw;color:#a8bad3;letter-spacing:.13em}.status{color:#a8bad3;font-size:.85vw;display:flex;align-items:center;justify-content:space-between;gap:8px}.status button{background:none;color:#dae8ff;border:1px solid #354b70;border-radius:8px;padding:7px 8px;cursor:pointer;font:inherit}.ticker{display:flex;align-items:stretch;background:#102341;margin:1.5vh -2vw 0;height:8.5vh;min-height:52px;overflow:hidden;flex-shrink:0}.tickername{display:flex;align-items:center;background:#60dcc5;color:#07182c;padding:0 1.4vw;font-size:1.35vw;font-weight:800;z-index:1}.tickerwindow{overflow:hidden;display:flex;align-items:center;flex:1;min-width:0}.track{display:flex;align-items:center;white-space:nowrap;width:max-content;animation:move var(--duration,180s) linear infinite;font-size:2.15vw;will-change:transform}.newsset{display:flex;align-items:center;gap:2.5vw;padding-right:2.5vw}.track a{color:#f5f8ff;text-decoration:none}.track a:hover{text-decoration:underline}.track i{color:#60dcc5;font-style:normal}@keyframes move{to{transform:translateX(-50%)}}@media(prefers-reduced-motion:reduce){.track{animation:none}.tickerwindow{overflow:auto}}
 @media(min-width:851px){.screen{height:100vh}}
@@ -54,33 +54,33 @@ html.tv #refresh,:fullscreen #refresh{display:none}
  .symbol{font-size:clamp(25.3px,6.325vw,46px)}
 }
 
-/* Black display with more room for the two time zones. */
-:root,.screen{background:#000}
-.board,.weather,.datetime{background:#000;border-color:#242424}
-.row{border-bottom-color:#242424}
-.ticker{background:#101010}
+/* Compact weather and balanced time zones. */
+:root,.screen{background:#071426;color:#F3F6FA}
+.board,.weather,.datetime{background:#0D1E34;border-color:#22364D}
+.row{border-bottom-color:#22364D}
+.ticker{background:#10243B}.tickername{background:#69BFB4;color:#071426}.track a{color:#F3F6FA}
 .datetime{gap:0}
 .timezone-group{width:100%;display:flex;flex-direction:column;align-items:center;gap:.35vh}
-.timezone-group+.timezone-group{border-top:1px solid #242424;margin-top:1vh;padding-top:1vh}
+.timezone-group+.timezone-group{border-top:1px solid #22364D;margin-top:1vh;padding-top:1vh}
 .datetime .date{margin-top:1vh}
 .datetime .weekday{margin-top:.3vh}
 .tokyo-date{font-size:.9vw;color:#a8bad3;line-height:1.3}
 @media(min-width:851px){
  .symbol{font-size:calc(4.61725 * var(--unit,1vw))}
- .aside{grid-template-rows:minmax(0,.95fr) minmax(0,1.15fr) auto}
+ .aside{grid-template-rows:minmax(0,.8fr) minmax(0,1.3fr) auto}
  .weather{padding:.7vh .7vw}
  .weather .temp{font-size:calc(5.8 * var(--unit,1vw))}
  .weather .icon{height:6vh;margin:.3vh auto}
  .weather .description{font-size:calc(1.7 * var(--unit,1vw))}
  .datetime{padding:.8vh .7vw}
- .datetime .clock{font-size:calc(4.5 * var(--unit,1vw))}
+ .datetime .clock{font-size:calc(5.04 * var(--unit,1vw))}
  .datetime .date{font-size:calc(1.7 * var(--unit,1vw))}
  .datetime .weekday{font-size:calc(1.3 * var(--unit,1vw))}
  .tokyo-date{font-size:calc(.9 * var(--unit,1vw))}
 }
 @media(max-width:850px){
  .symbol{font-size:clamp(27.83px,6.9575vw,50.6px);white-space:normal}
- .datetime .clock{font-size:clamp(38px,9vw,64px)}
+ .datetime .clock{font-size:clamp(42.56px,10.08vw,71.68px)}
  .datetime .timezone{font-size:10px;letter-spacing:.08em}
  .datetime .date{font-size:clamp(16px,4vw,26px)}
  .datetime .weekday{font-size:16px}
@@ -89,10 +89,20 @@ html.tv #refresh,:fullscreen #refresh{display:none}
 }
 
 /* Subtle time-zone distinction; labels remain clear without color. */
-#clock{color:#f5f8ff}
+#clock{color:#F3F6FA}
 #clock-tokyo{color:#b8d7f0}
 .timezone-group .timezone{font-weight:700;letter-spacing:.12em;color:#b5becb}
 .timezone-group+.timezone-group .timezone{color:#b8d7f0}
+
+/* Keep temperature and weather symbol on one line at every screen size. */
+.weatherbody{display:grid;grid-template-columns:auto auto;justify-content:center;align-items:center;column-gap:.8vw}
+.weatherbody .temp{grid-column:1;grid-row:1}
+.weatherbody .icon{grid-column:2;grid-row:1;margin:0;width:5.5vw;height:5.1vw;max-height:8vh}
+.weatherbody .description{grid-column:1/-1;grid-row:2}
+@media(max-width:850px){
+ .weatherbody{column-gap:6px}
+ .weatherbody .icon{width:44px;height:42px;max-height:none}
+}
 </style></head><body><div class="screen">
 
 <main class="main"><section class="board" aria-label="Курсы валют и нефть"><div class="rows">
@@ -180,4 +190,5 @@ document.querySelector('#refresh').addEventListener('click',()=>load(true));
 window.addEventListener('online',()=>load(true));
 load(true);setInterval(()=>load(false),120000);setInterval(refreshNews,300000);setInterval(status,60000);
 </script></body></html>
+
 
