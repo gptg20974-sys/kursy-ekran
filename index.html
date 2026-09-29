@@ -148,6 +148,13 @@ html.tv #refresh,:fullscreen #refresh{display:none}
  .datetime{padding:1vh .8vw}
 }
 @media(max-width:850px){.datetime .timezone-group .timezone{font-size:18px;letter-spacing:.02em}}
+
+/* Narrower sidebar with larger, more separated clock groups. */
+@media(min-width:851px){
+ .main{grid-template-columns:minmax(0,1fr) 23%}
+ .datetime .timezone-group .clock{font-size:calc(5.5 * var(--unit,1vw));line-height:1.12}
+ .datetime .timezone-group+.timezone-group{margin-top:2.4vh;padding-top:2.4vh}
+}
 </style></head><body><div class="screen">
 
 <main class="main"><section class="board" aria-label="Курсы валют и нефть"><div class="rows">
@@ -249,6 +256,7 @@ document.querySelector('#refresh').addEventListener('click',()=>load(true));
 window.addEventListener('online',()=>load(true));
 load(true);setInterval(()=>load(false),120000);setInterval(refreshNews,300000);setInterval(status,60000);
 </script></body></html>
+
 
 
 
