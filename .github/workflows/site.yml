@@ -3,7 +3,7 @@ name: Update dashboard
 on:
   push:
     branches: [main]
-     paths-ignore:
+    paths-ignore:
       - 'data.json'
 
   schedule:
