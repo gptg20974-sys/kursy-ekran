@@ -243,8 +243,28 @@ function render(data,includeNews){
 function showNews(data){headlines(data.news);const label=document.querySelector('.tickername');const stale=sourceNote(data,'news');label.textContent=stale?'РБК · АРХИВ':'РБК · НОВОСТИ';label.title=stale||'Новости РБК'}
 function remember(data){try{localStorage.setItem(CACHE_KEY,JSON.stringify(data))}catch(e){/* Storage can be disabled or full. */}}
 async function fetchData(){
- const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),20000);
- try{const response=await fetch('./data.json',{cache:'no-store',signal:controller.signal});if(!response.ok)throw Error('HTTP');const data=await response.json();if(!data||!Number.isFinite(new Date(data.fetchedAt).getTime())||!(data.rates||data.brent||data.weather||data.news?.length))throw Error('Invalid data');return data}finally{clearTimeout(timeout)}
+ const stamp=Date.now();
+ const urls=[
+  'https://raw.githubusercontent.com/gptg20974-sys/kursy-ekran/main/data.json?t='+stamp,
+  './data.json?t='+stamp
+ ];
+ let lastError=Error('Data unavailable');
+
+ for(const url of urls){
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
+  try{
+   const response=await fetch(url,{cache:'no-store',signal:controller.signal});
+   if(!response.ok)throw Error('HTTP '+response.status);
+   const data=await response.json();
+   if(!data||!Number.isFinite(new Date(data.fetchedAt).getTime())||!(data.rates||data.brent||data.weather||data.news?.length))throw Error('Invalid data');
+   return data;
+  }catch(e){
+   lastError=e;
+  }finally{
+   clearTimeout(timeout);
+  }
+ }
+ throw lastError;
 }
 async function load(includeNews=false,manual=false){
  if(loading)return;
