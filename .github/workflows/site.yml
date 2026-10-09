@@ -17,17 +17,14 @@ permissions:
   id-token: write
 
 concurrency:
-  group: dashboard-updater
-  cancel-in-progress: true
+  group: dashboard-${{ github.event_name }}
+  cancel-in-progress: false
 
 jobs:
-  publish:
+  update-data:
+    if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    timeout-minutes: 5
 
     steps:
       - uses: actions/checkout@v4
@@ -41,7 +38,21 @@ jobs:
           git config user.name "Dashboard updater"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data.json
-          git diff --cached --quiet || (git commit -m "Update dashboard data" && git push)
+          git diff --cached --quiet || git commit -m "Update dashboard data"
+          git pull --rebase origin main
+          git push
+
+  publish:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
 
       - name: Prepare page
         run: mkdir -p public && cp index.html data.json public/
@@ -51,6 +62,9 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
+
+      - name: Wait for artifact registration
+        run: sleep 5
 
       - name: Publish site
         id: deployment
