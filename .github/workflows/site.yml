@@ -7,33 +7,75 @@ on:
       - 'data.json'
 
   schedule:
-    - cron: '2-59/5 * * * *'
+    - cron: '17,47 * * * *'
 
   workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Action to run'
+        required: false
+        default: 'publish'
+        type: choice
+        options:
+          - publish
+          - update
 
 permissions:
   contents: write
+  actions: write
   pages: write
   id-token: write
 
 concurrency:
-  group: dashboard-${{ github.event_name }}
+  group: ${{ (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'publish')) && 'dashboard-publish' || 'dashboard-updater' }}
   cancel-in-progress: false
 
 jobs:
   update-data:
-    if: github.event_name == 'schedule'
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'update')
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check whether watchdog needs to restart the chain
+        id: gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          python3 - <<'PY'
+          import datetime as dt
+          import json
+          import os
+          from pathlib import Path
+
+          should_run = True
+
+          if os.environ['EVENT_NAME'] == 'schedule':
+              try:
+                  data = json.loads(Path('data.json').read_text(encoding='utf-8'))
+                  fetched = dt.datetime.fromisoformat(data['fetchedAt'].replace('Z', '+00:00'))
+                  age = (dt.datetime.now(dt.timezone.utc) - fetched).total_seconds()
+                  should_run = age > 900
+                  print(f'Watchdog data age: {age:.0f} seconds')
+              except Exception as exc:
+                  print(f'Watchdog could not validate data freshness: {exc}')
+                  should_run = True
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
+              output.write(f"run={'true' if should_run else 'false'}\n")
+
+          print('Updater chain action:', 'run/restart' if should_run else 'healthy, no action')
+          PY
+
       - name: Update data
+        if: steps.gate.outputs.run == 'true'
         timeout-minutes: 3
         run: python3 scripts/update.py
 
       - name: Save readings
+        if: steps.gate.outputs.run == 'true'
         run: |
           git config user.name "Dashboard updater"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -42,8 +84,22 @@ jobs:
           git pull --rebase origin main
           git push
 
+      - name: Continue update chain in 5 minutes
+        if: steps.gate.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          sleep 300
+          curl --fail-with-body --silent --show-error --location \
+            --request POST \
+            --header "Accept: application/vnd.github+json" \
+            --header "Authorization: Bearer ${GH_TOKEN}" \
+            --header "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/site.yml/dispatches" \
+            --data '{"ref":"main","inputs":{"mode":"update"}}'
+
   publish:
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'publish')
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
